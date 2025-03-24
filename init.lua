@@ -78,14 +78,14 @@ local ensure_packer = function()
   
   
     -- Multi Cursor, from https://github.com/jake-stewart/multicursor.nvim 
-    use {
-      'jake-stewart/multicursor.nvim',
-      requires = { 'nvim-treesitter/nvim-treesitter' },
-      config = function()
-        require("multicursor").setup()
-        vim.keymap.set('n', 'ga', require('multicursor-api').new_under_cursor, { desc = "Create a new cursor" })
-        end
-    }
+    -- use {
+      -- 'jake-stewart/multicursor.nvim',
+      -- requires = { 'nvim-treesitter/nvim-treesitter' },
+      -- config = function()
+        -- require("multicursor").setup()
+        -- vim.keymap.set('n', 'ga', require('multicursor-api').new_under_cursor, { desc = "Create a new cursor" })
+        -- end
+    -- }
     
     -- Automatically set up configuration after cloning packer.nvim
     if packer_bootstrap then
@@ -154,6 +154,12 @@ local ensure_packer = function()
     settings = {
       python = {
         pythonPath = vim.fn.exepath("python"),  -- Uses the Python from your active environment
+        analysis = {
+            typeCheckingMode = "basic",
+            autoSearchPaths = true,
+            useLibraryCodeForTypes = true,
+            diagnosticMode = "workspace",
+        }
       }
     }
   })
@@ -276,8 +282,9 @@ local ensure_packer = function()
   vim.keymap.set('n', '<leader>ct', require('crates').toggle, { desc = "Toggle crates" })
   vim.keymap.set('n', '<leader>cr', require('crates').reload, { desc = "Reload crates" })
   
+  vim.keymap.set('n', 'ge', vim.diagnostic.goto_next)
+  vim.keymap.set('n', 'gE', vim.diagnostic.goto_prev)
   
   vim.cmd [[
     command! PyrightPath lua print(vim.inspect(require('lspconfig').pyright.settings))
   ]]
-  
