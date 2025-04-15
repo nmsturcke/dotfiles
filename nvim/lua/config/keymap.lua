@@ -27,6 +27,15 @@ vim.keymap.set('n', '<leader>cr', require('crates').reload, { desc = "Reload cra
 vim.keymap.set('n', 'ge', vim.diagnostic.goto_next)
 vim.keymap.set('n', 'gE', vim.diagnostic.goto_prev)
 
+-- Transparency
+-- if vim.g.neovide then
+--     if vim.g.neovide_normal_opacity == 0.8 then
+--         vim.keymap.set('n', '<leader>t', (vim.g.neovide_normal_opacity = 0.8)))
+--     else 
+--         vim.keymap.set('n', '<leader>t', vim.g.neovide_normal_opacity = 1.0)
+--     end
+-- end
+
 vim.cmd [[
 command! PyrightPath lua print(vim.inspect(require('lspconfig').pyright.settings))
 ]]

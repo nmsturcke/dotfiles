@@ -152,6 +152,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
         if vim.fn.argc() == 0 then
             -- Use nvim-tree instead of netrw
             vim.cmd("NvimTreeOpen")
+            vim.cmd("NvimTreeResize +15")
 
             -- Move to the right window (main editor area)
             vim.cmd("wincmd l")
@@ -177,7 +178,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
     end,
 })
 
-vim.cmd("colorscheme ayu-mirage")
 
 require('mason').setup()
 require('mason-lspconfig').setup({
@@ -189,7 +189,7 @@ local lspconfig = require('lspconfig')
 lspconfig.pyright.setup({
     settings = {
         python = {
-            pythonPath = vim.fn.exepath("python"),  -- Uses the Python from your active environment
+            pythonPath = vim.fn.exepath("python3"),  -- Uses the Python from your active environment
             analysis = {
                 typeCheckingMode = "basic",
                 autoSearchPaths = true,
