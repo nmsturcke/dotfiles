@@ -112,7 +112,7 @@ require('packer').startup(function(use)
         end,
     }
 
-    use "andweeb/presence.nvim"
+    use "IogaMaster/neocord"
     -- Multi Cursor, from https://github.com/jake-stewart/multicursor.nvim 
     -- use {
     -- 'jake-stewart/multicursor.nvim',
@@ -346,7 +346,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 
 -- The setup config table shows all available config options with their default values:
-require("presence").setup({
+require("neocord").setup({
     -- General options
     auto_update         = true,                       -- Update activity based on autocmd events (if `false`, map or manually execute `:lua package.loaded.presence:update()`)
     neovim_image_text   = "Best Editor",              -- Text displayed when hovered over the Neovim image
