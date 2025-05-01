@@ -1,10 +1,13 @@
-
 if status is-interactive
     # Commands to run in interactive sessions can go here
 end
 
 function vactivate
     source venv/bin/activate.fish
+end
+
+function picker
+    ~/.local/share/picker/venv/bin/python3.13 ~/.local/share/picker/main.py
 end
 
 set -gx EDITOR nvim
