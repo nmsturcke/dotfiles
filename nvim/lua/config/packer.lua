@@ -49,6 +49,9 @@ require('packer').startup(function(use)
         run = ':TSUpdate'
     }
 
+    -- Copilot
+    use 'github/copilot.vim'
+
     -- File explorer (better than netrw)
     use {
         'kyazdani42/nvim-tree.lua',
@@ -159,7 +162,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
             vim.cmd("wincmd l")
 
             -- Create a horizontal split for the right side
-            vim.cmd("split")
+            -- vim.cmd("split")
 
             -- Adjust the size of the splits if needed
             -- vim.cmd("resize 50%")
@@ -202,6 +205,13 @@ lspconfig.pyright.setup({
 })
 
 
+-- Restart the LSP when a Python file is saved.
+vim.api.nvim_create_autocmd({"BufWritePost"}, {
+    pattern = {"*.py"},
+    callback = function()
+        vim.cmd("LspRestart pyright")
+    end,
+})
 
 local prettier = require("prettier")
 
@@ -318,11 +328,22 @@ require('nvim-tree').setup({
 
 -- Enable treesitter
 require('nvim-treesitter.configs').setup({
-    ensure_installed = { "rust", "lua", "vim", "toml" },
+    ensure_installed = { "rust", "lua", "vim", "toml", "python" },
     highlight = {
         enable = true,
+        additional_vim_regex_highlighting = false,
     },
 })
+
+
+-- Custom highlight group for f-string interpolation
+vim.api.nvim_command('highlight pythonFString guifg=#88AAFF ctermfg=111')
+vim.api.nvim_command('highlight pythonFStringVar guifg=#FF8866 ctermfg=209')
+
+-- Link treesitter captures to our custom highlight groups
+vim.api.nvim_command('highlight link @string.special.python pythonFString')
+vim.api.nvim_command('highlight link @punctuation.special.python pythonFString')
+vim.api.nvim_command('highlight link @variable.python.f_string pythonFStringVar')
 
 -- Configure crates.nvim
 require('crates').setup()
@@ -369,3 +390,46 @@ require("neocord").setup({
     workspace_text      = "Working on %s",            -- Format string rendered when in a git repository (either string or function(project_name: string|nil, filename: string): string)
     line_number_text    = "Line %s out of %s",        -- Format string rendered when `enable_line_number` is set to true (either string or function(line_number: number, line_count: number): string)
 })
+
+vim.api.nvim_set_hl(0, 'TSStringFBraces', { fg = '#ff5555', bold = true })
+vim.api.nvim_set_hl(0, 'TSVariableSpecialFString', { fg = '#ffaa55' })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.cmd([[
+      highlight! link @string.fbraces TSStringFBraces
+      highlight! link @variable.special.fstring TSVariableSpecialFString
+    ]])
+  end,
+})
+-- Add this to your init.lua
+-- This will help us debug what highlight groups are being applied
+vim.keymap.set('n', 'gx', function()
+  local ts_utils = require('nvim-treesitter.ts_utils')
+  local current_node = ts_utils.get_node_at_cursor()
+  
+  if current_node then
+    local captures = vim.treesitter.get_captures_at_cursor()
+    print(vim.inspect(captures))
+  end
+end, { noremap = true, silent = true })
+
+vim.api.nvim_create_user_command('TSCheck', function()
+  local ft = vim.bo.filetype
+  local has_parser = pcall(vim.treesitter.get_parser, 0, ft)
+  print("Filetype: " .. ft .. ", Has parser: " .. tostring(has_parser))
+  
+  if has_parser then
+    -- Check if parser is working properly
+    local parser = vim.treesitter.get_parser(0, ft)
+    local tree = parser:parse()[1]
+    local root = tree:root()
+    local node_count = 0
+    for _ in root:iter_children() do
+      node_count = node_count + 1
+    end
+    print("Parser found " .. node_count .. " top-level nodes")
+  end
+end, {})
+
