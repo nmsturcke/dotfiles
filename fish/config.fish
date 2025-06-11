@@ -3,6 +3,7 @@ if status is-interactive
 end
 
 function vactivate
+    set -gx VIRTUAL_ENV_DISABLE_PROMPT 1
     source venv/bin/activate.fish
 end
 
