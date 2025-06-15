@@ -101,10 +101,10 @@ require('packer').startup(function(use)
         config = function()
             require("typescript-tools").setup {
                 on_attach = 
-                    function(client, bufnr)
-                        client.server_capabilities.documentFormattingProvider = false
-                        client.server_capabilities.documentRangeFormattingProvider = false
-                    end,
+                function(client, bufnr)
+                    client.server_capabilities.documentFormattingProvider = false
+                    client.server_capabilities.documentRangeFormattingProvider = false
+                end,
                 settings = {
                     jsx_close_tag = {
                         enable = true,
@@ -118,66 +118,66 @@ require('packer').startup(function(use)
     use "IogaMaster/neocord"
     -- Multi Cursor, from https://github.com/jake-stewart/multicursor.nvim 
     use {
-    "jake-stewart/multicursor.nvim",
-    branch = "1.0",
-    config = function()
-        local mc = require("multicursor-nvim")
-        mc.setup()
+        "jake-stewart/multicursor.nvim",
+        branch = "1.0",
+        config = function()
+            local mc = require("multicursor-nvim")
+            mc.setup()
 
-        local set = vim.keymap.set
+            local set = vim.keymap.set
 
-        -- Add or skip cursor above/below the main cursor.
-        set({"n", "x"}, "<up>", function() mc.lineAddCursor(-1) end)
-        set({"n", "x"}, "<down>", function() mc.lineAddCursor(1) end)
-        set({"n", "x"}, "<leader><up>", function() mc.lineSkipCursor(-1) end)
-        set({"n", "x"}, "<leader><down>", function() mc.lineSkipCursor(1) end)
+            -- Add or skip cursor above/below the main cursor.
+            set({"n", "x"}, "<up>", function() mc.lineAddCursor(-1) end)
+            set({"n", "x"}, "<down>", function() mc.lineAddCursor(1) end)
+            set({"n", "x"}, "<leader><up>", function() mc.lineSkipCursor(-1) end)
+            set({"n", "x"}, "<leader><down>", function() mc.lineSkipCursor(1) end)
 
-        -- Add or skip adding a new cursor by matching word/selection
-        set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
-        set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
-        set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
-        set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
+            -- Add or skip adding a new cursor by matching word/selection
+            set({"n", "x"}, "<leader>n", function() mc.matchAddCursor(1) end)
+            set({"n", "x"}, "<leader>s", function() mc.matchSkipCursor(1) end)
+            set({"n", "x"}, "<leader>N", function() mc.matchAddCursor(-1) end)
+            set({"n", "x"}, "<leader>S", function() mc.matchSkipCursor(-1) end)
 
-        -- Add and remove cursors with control + left click.
-        set("n", "<c-leftmouse>", mc.handleMouse)
-        set("n", "<c-leftdrag>", mc.handleMouseDrag)
-        set("n", "<c-leftrelease>", mc.handleMouseRelease)
+            -- Add and remove cursors with control + left click.
+            set("n", "<c-leftmouse>", mc.handleMouse)
+            set("n", "<c-leftdrag>", mc.handleMouseDrag)
+            set("n", "<c-leftrelease>", mc.handleMouseRelease)
 
-        -- Disable and enable cursors.
-        set({"n", "x"}, "<c-q>", mc.toggleCursor)
+            -- Disable and enable cursors.
+            set({"n", "x"}, "<c-q>", mc.toggleCursor)
 
-        -- Mappings defined in a keymap layer only apply when there are
-        -- multiple cursors. This lets you have overlapping mappings.
-        mc.addKeymapLayer(function(layerSet)
+            -- Mappings defined in a keymap layer only apply when there are
+            -- multiple cursors. This lets you have overlapping mappings.
+            mc.addKeymapLayer(function(layerSet)
 
-            -- Select a different cursor as the main one.
-            layerSet({"n", "x"}, "<left>", mc.prevCursor)
-            layerSet({"n", "x"}, "<right>", mc.nextCursor)
+                -- Select a different cursor as the main one.
+                layerSet({"n", "x"}, "<left>", mc.prevCursor)
+                layerSet({"n", "x"}, "<right>", mc.nextCursor)
 
-            -- Delete the main cursor.
-            layerSet({"n", "x"}, "<leader>x", mc.deleteCursor)
+                -- Delete the main cursor.
+                layerSet({"n", "x"}, "<leader>x", mc.deleteCursor)
 
-            -- Enable and clear cursors using escape.
-            layerSet("n", "<esc>", function()
-                if not mc.cursorsEnabled() then
-                    mc.enableCursors()
-                else
-                    mc.clearCursors()
-                end
+                -- Enable and clear cursors using escape.
+                layerSet("n", "<esc>", function()
+                    if not mc.cursorsEnabled() then
+                        mc.enableCursors()
+                    else
+                        mc.clearCursors()
+                    end
+                end)
             end)
-        end)
 
-        -- Customize how cursors look.
-        local hl = vim.api.nvim_set_hl
-        hl(0, "MultiCursorCursor", { reverse = true })
-        hl(0, "MultiCursorVisual", { link = "Visual" })
-        hl(0, "MultiCursorSign", { link = "SignColumn"})
-        hl(0, "MultiCursorMatchPreview", { link = "Search" })
-        hl(0, "MultiCursorDisabledCursor", { reverse = true })
-        hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
-        hl(0, "MultiCursorDisabledSign", { link = "SignColumn"})
-    end
-}
+            -- Customize how cursors look.
+            local hl = vim.api.nvim_set_hl
+            hl(0, "MultiCursorCursor", { reverse = true })
+            hl(0, "MultiCursorVisual", { link = "Visual" })
+            hl(0, "MultiCursorSign", { link = "SignColumn"})
+            hl(0, "MultiCursorMatchPreview", { link = "Search" })
+            hl(0, "MultiCursorDisabledCursor", { reverse = true })
+            hl(0, "MultiCursorDisabledVisual", { link = "Visual" })
+            hl(0, "MultiCursorDisabledSign", { link = "SignColumn"})
+        end
+    }
 
     -- Automatically set up configuration after cloning packer.nvim
     if packer_bootstrap then
@@ -237,8 +237,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 require('mason').setup()
 require('mason-lspconfig').setup({
-        ensure_installed = { 'pyright', 'pylsp' }
-    })
+    automatic_enable = false
+})
 
 local lspconfig = require('lspconfig')
 
@@ -435,58 +435,58 @@ require("neocord").setup({
             url = "https://github.com/nmsturcke"
         }
     },                       -- Configure Rich Presence button(s), either a boolean to enable/disable, a static table (`{{ label = "<label>", url = "<url>" }, ...}`, or a function(buffer: string, repo_url: string|nil): table)
-    file_assets         = {},                         -- Custom file asset definitions keyed by file names and extensions (see default config at `lua/presence/file_assets.lua` for reference)
-    show_time           = true,                       -- Show the timer
+        file_assets         = {},                         -- Custom file asset definitions keyed by file names and extensions (see default config at `lua/presence/file_assets.lua` for reference)
+        show_time           = true,                       -- Show the timer
 
-    -- Rich Presence text options
-    editing_text        = "Editing %s",               -- Format string rendered when an editable file is loaded in the buffer (either string or function(filename: string): string)
-    file_explorer_text  = "Browsing %s",              -- Format string rendered when browsing a file explorer (either string or function(file_explorer_name: string): string)
-    git_commit_text     = "Committing changes",       -- Format string rendered when committing changes in git (either string or function(filename: string): string)
-    plugin_manager_text = "Managing plugins",         -- Format string rendered when managing plugins (either string or function(plugin_manager_name: string): string)
-    reading_text        = "Reading %s",               -- Format string rendered when a read-only or unmodifiable file is loaded in the buffer (either string or function(filename: string): string)
-    workspace_text      = "Working on %s",            -- Format string rendered when in a git repository (either string or function(project_name: string|nil, filename: string): string)
-    line_number_text    = "Line %s out of %s",        -- Format string rendered when `enable_line_number` is set to true (either string or function(line_number: number, line_count: number): string)
-})
+        -- Rich Presence text options
+        editing_text        = "Editing %s",               -- Format string rendered when an editable file is loaded in the buffer (either string or function(filename: string): string)
+            file_explorer_text  = "Browsing %s",              -- Format string rendered when browsing a file explorer (either string or function(file_explorer_name: string): string)
+                git_commit_text     = "Committing changes",       -- Format string rendered when committing changes in git (either string or function(filename: string): string)
+                    plugin_manager_text = "Managing plugins",         -- Format string rendered when managing plugins (either string or function(plugin_manager_name: string): string)
+                        reading_text        = "Reading %s",               -- Format string rendered when a read-only or unmodifiable file is loaded in the buffer (either string or function(filename: string): string)
+                            workspace_text      = "Working on %s",            -- Format string rendered when in a git repository (either string or function(project_name: string|nil, filename: string): string)
+                                line_number_text    = "Line %s out of %s",        -- Format string rendered when `enable_line_number` is set to true (either string or function(line_number: number, line_count: number): string)
+                                })
 
-vim.api.nvim_set_hl(0, 'TSStringFBraces', { fg = '#ff5555', bold = true })
-vim.api.nvim_set_hl(0, 'TSVariableSpecialFString', { fg = '#ffaa55' })
+                                vim.api.nvim_set_hl(0, 'TSStringFBraces', { fg = '#ff5555', bold = true })
+                                vim.api.nvim_set_hl(0, 'TSVariableSpecialFString', { fg = '#ffaa55' })
 
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
-  callback = function()
-    vim.cmd([[
-      highlight! link @string.fbraces TSStringFBraces
-      highlight! link @variable.special.fstring TSVariableSpecialFString
-    ]])
-  end,
-})
--- Add this to your init.lua
--- This will help us debug what highlight groups are being applied
-vim.keymap.set('n', 'gx', function()
-  local ts_utils = require('nvim-treesitter.ts_utils')
-  local current_node = ts_utils.get_node_at_cursor()
-  
-  if current_node then
-    local captures = vim.treesitter.get_captures_at_cursor()
-    print(vim.inspect(captures))
-  end
-end, { noremap = true, silent = true })
+                                vim.api.nvim_create_autocmd("FileType", {
+                                    pattern = "python",
+                                    callback = function()
+                                        vim.cmd([[
+                                        highlight! link @string.fbraces TSStringFBraces
+                                        highlight! link @variable.special.fstring TSVariableSpecialFString
+                                        ]])
+                                    end,
+                                })
+                                -- Add this to your init.lua
+                                -- This will help us debug what highlight groups are being applied
+                                vim.keymap.set('n', 'gx', function()
+                                    local ts_utils = require('nvim-treesitter.ts_utils')
+                                    local current_node = ts_utils.get_node_at_cursor()
 
-vim.api.nvim_create_user_command('TSCheck', function()
-  local ft = vim.bo.filetype
-  local has_parser = pcall(vim.treesitter.get_parser, 0, ft)
-  print("Filetype: " .. ft .. ", Has parser: " .. tostring(has_parser))
-  
-  if has_parser then
-    -- Check if parser is working properly
-    local parser = vim.treesitter.get_parser(0, ft)
-    local tree = parser:parse()[1]
-    local root = tree:root()
-    local node_count = 0
-    for _ in root:iter_children() do
-      node_count = node_count + 1
-    end
-    print("Parser found " .. node_count .. " top-level nodes")
-  end
-end, {})
+                                    if current_node then
+                                        local captures = vim.treesitter.get_captures_at_cursor()
+                                        print(vim.inspect(captures))
+                                    end
+                                end, { noremap = true, silent = true })
+
+                                vim.api.nvim_create_user_command('TSCheck', function()
+                                    local ft = vim.bo.filetype
+                                    local has_parser = pcall(vim.treesitter.get_parser, 0, ft)
+                                    print("Filetype: " .. ft .. ", Has parser: " .. tostring(has_parser))
+
+                                    if has_parser then
+                                        -- Check if parser is working properly
+                                        local parser = vim.treesitter.get_parser(0, ft)
+                                        local tree = parser:parse()[1]
+                                        local root = tree:root()
+                                        local node_count = 0
+                                        for _ in root:iter_children() do
+                                            node_count = node_count + 1
+                                        end
+                                        print("Parser found " .. node_count .. " top-level nodes")
+                                    end
+                                end, {})
 

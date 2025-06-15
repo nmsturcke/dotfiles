@@ -18,7 +18,7 @@ vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Show diagn
 vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { desc = "Toggle diagnostics window" })
 
 -- NvimTree
-vim.keymap.set('n', '<leader>n', '<cmd>NvimTreeToggle<cr>', { desc = "Toggle file tree" })
+vim.keymap.set('n', '<leader>t', '<cmd>NvimTreeToggle<cr>', { desc = "Toggle file tree" })
 
 -- Crates.nvim
 vim.keymap.set('n', '<leader>ct', require('crates').toggle, { desc = "Toggle crates" })
