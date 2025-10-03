@@ -179,6 +179,14 @@ require('packer').startup(function(use)
         end
     }
 
+    -- Which key
+    use {
+        "folke/which-key.nvim",
+        config = function()
+            require("which-key").setup {}
+        end
+    }
+
     -- Automatically set up configuration after cloning packer.nvim
     if packer_bootstrap then
         require('packer').sync()
@@ -237,25 +245,17 @@ vim.api.nvim_create_autocmd("TermOpen", {
 
 require('mason').setup()
 require('mason-lspconfig').setup({
-    automatic_enable = false
+    ensure_installed = {
+        "black",
+        "pyright",
+        "ruff",
+        "tsserver",
+        "eslint",
+        "prettierd",
+        "rust-analyzer",
+    },
+    automatic_installation = false,
 })
-
-local lspconfig = require('lspconfig')
-
-lspconfig.pyright.setup({
-    settings = {
-        python = {
-            pythonPath = vim.fn.exepath("python3"),  -- Uses the Python from your active environment
-            analysis = {
-                typeCheckingMode = "basic",
-                autoSearchPaths = true,
-                useLibraryCodeForTypes = true,
-                diagnosticMode = "workspace",
-            }
-        }
-    }
-})
-
 
 -- Restart the LSP when a Python file is saved.
 vim.api.nvim_create_autocmd({"BufWritePost"}, {

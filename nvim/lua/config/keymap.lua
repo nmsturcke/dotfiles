@@ -15,7 +15,9 @@ vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, { desc = "Code action
 vim.keymap.set('n', '<leader>e', vim.diagnostic.open_float, { desc = "Show diagnostic" })
 
 -- Trouble
-vim.keymap.set('n', '<leader>xx', '<cmd>TroubleToggle<cr>', { desc = "Toggle diagnostics window" })
+vim.keymap.set('n', '<leader>xx', '<cmd>Trouble diagnostics<cr>', { desc = "Toggle diagnostics window" })
+vim.keymap.set('n', '<leader>xq', '<cmd>Trouble quickfix<cr>', { desc = "Toggle quickfix window" })
+vim.keymap.set('n', '<leader>xr', '<cmd>Trouble lsp_references<cr>', { desc = "Toggle LSP references window" })
 
 -- NvimTree
 vim.keymap.set('n', '<leader>t', '<cmd>NvimTreeToggle<cr>', { desc = "Toggle file tree" })
