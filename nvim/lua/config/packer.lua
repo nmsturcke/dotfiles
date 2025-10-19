@@ -12,13 +12,74 @@ end
 
 local packer_bootstrap = ensure_packer()
 
+-- Rustaceanvim setup
+-- According to Claude this has to be before the plugin is loaded
+vim.g.rustaceanvim = {
+    server = {
+        on_attach = function(client, bufnr)
+            -- Enable inlay hints if supported
+            if client.server_capabilities.inlayHintProvider then
+                vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            end
+        end,
+        default_settings = {
+            ['rust-analyzer'] = {
+                check = {
+                    command = "clippy",
+                },
+                cargo = {
+                    allFeatures = true,
+                },
+                procMacro = {
+                    enable = true,
+                },
+                inlayHints = {
+                    bindingModeHints = {
+                        enable = false,
+                    },
+                    chainingHints = {
+                        enable = true,
+                    },
+                    closingBraceHints = {
+                        enable = true,
+                        minLines = 25,
+                    },
+                    closureReturnTypeHints = {
+                        enable = "never",
+                    },
+                    lifetimeElisionHints = {
+                        enable = "never",
+                        useParameterNames = false,
+                    },
+                    maxLength = 25,
+                    parameterHints = {
+                        enable = true,
+                    },
+                    reborrowHints = {
+                        enable = "never",
+                    },
+                    renderColons = true,
+                    typeHints = {
+                        enable = true,
+                        hideClosureInitialization = false,
+                        hideNamedConstructor = false,
+                    },
+                },
+            },
+        },
+    },
+}
+
 -- Plugin setup
 require('packer').startup(function(use)
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
 
     -- Rust specific plugins
-    use 'simrat39/rust-tools.nvim'
+    use {
+        'mrcjkb/rustaceanvim',
+        ft = { 'rust' },
+    }
     use {
         'saecki/crates.nvim',
         requires = { 'nvim-lua/plenary.nvim' }
@@ -243,16 +304,24 @@ vim.api.nvim_create_autocmd("TermOpen", {
 })
 
 
-require('mason').setup()
-require('mason-lspconfig').setup({
+require('mason').setup({
     ensure_installed = {
-        "black",
+        -- LSP servers
         "pyright",
+        "ts_ls",
+        "rust-analyzer",
+        -- Formatters/linters
+        "black",
         "ruff",
-        "tsserver",
         "eslint",
         "prettierd",
-        "rust-analyzer",
+    },
+})
+
+require('mason-lspconfig').setup({
+    ensure_installed = {
+        "pyright",
+        "ts_ls",
     },
     automatic_installation = false,
 })
@@ -303,36 +372,6 @@ prettier.setup({
         use_tabs = false,
     },
 
-})
-
--- Configure rust-analyzer
-require('rust-tools').setup({
-    tools = {
-        runnables = {
-            use_telescope = true,
-        },
-        inlay_hints = {
-            auto = true,
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-    server = {
-        settings = {
-            ["rust-analyzer"] = {
-                checkOnSave = {
-                    command = "clippy"
-                },
-                cargo = {
-                    allFeatures = true
-                },
-                procMacro = {
-                    enable = true
-                }
-            }
-        }
-    }
 })
 
 -- Set up nvim-cmp
