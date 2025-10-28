@@ -38,3 +38,4 @@ set -g theme_display_cmd_duration yes
 set -g theme_powerline_fonts yes
 set -g theme_nerd_fonts yes
 
+set -U fish_greeting "🐟"
