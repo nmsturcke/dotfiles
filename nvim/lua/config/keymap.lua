@@ -20,7 +20,9 @@ vim.keymap.set('n', '<leader>xq', '<cmd>Trouble quickfix<cr>', { desc = "Toggle 
 vim.keymap.set('n', '<leader>xr', '<cmd>Trouble lsp_references<cr>', { desc = "Toggle LSP references window" })
 
 -- NvimTree
-vim.keymap.set('n', '<leader>t', '<cmd>NvimTreeToggle<cr>', { desc = "Toggle file tree" })
+vim.keymap.set('n', '<leader>tt', '<cmd>NvimTreeToggle<cr>', { desc = "Toggle file tree" })
+vim.keymap.set('n', '<leader>tf', '<cmd>NvimTreeFindFile<cr>', { desc = "Find current file in tree" })
+vim.keymap.set('n', '<leader>tc', '<cmd>NvimTreeCollapse<cr>', { desc = "Collapse all directories" })
 
 -- Crates.nvim
 vim.keymap.set('n', '<leader>ct', require('crates').toggle, { desc = "Toggle crates" })
