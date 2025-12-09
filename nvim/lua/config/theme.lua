@@ -23,7 +23,7 @@ end, {
 if vim.g.neovide then
     vim.g.neovide_cursor_animation_length = 0.150
     vim.g.neovide_cursor_trail_size = 0.9
-    vim.g.neovide_normal_opacity = 1 
+    vim.g.neovide_normal_opacity = 1
     vim.g.neovide_cursor_vfx_mode= "pixiedust"
     vim.cmd("Theme ayu-mirage")
 

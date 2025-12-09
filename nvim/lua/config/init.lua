@@ -1,4 +1,6 @@
+require("plugins")
 require("config.set")
-require("config.packer")
 require("config.keymap")
-require("config.theme")
+require("config.onstart")
+require("config.cmp")
+-- require("config.theme")
