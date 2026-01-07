@@ -39,3 +39,53 @@ set -g theme_powerline_fonts yes
 set -g theme_nerd_fonts yes
 
 set -U fish_greeting "🐟"
+
+# GitHub CI status - async background fetch
+set -g __ci_status_fetch_time 0
+
+function __get_ci_status
+    # Only run in git repos
+    if not git rev-parse --git-dir >/dev/null 2>&1
+        return
+    end
+
+    set -l branch (git branch --show-current 2>/dev/null)
+    if test -z "$branch"
+        return
+    end
+
+    set -l cache_file ~/.cache/fish_ci_status
+    mkdir -p ~/.cache
+
+    # Read and display cached value
+    if test -f $cache_file
+        set -l cached (string split ":" < $cache_file)
+        if test "$cached[1]" = "$branch" -a -n "$cached[2]"
+            set_color $cached[3]
+            echo -n $cached[2]
+            set_color white  # restore git_color
+        end
+    end
+
+    # Refresh in background every 60 seconds
+    set -l now (date +%s)
+    if test (math $now - $__ci_status_fetch_time) -ge 60
+        set -g __ci_status_fetch_time $now
+        fish -c "
+            set -l result (gh run list --branch $branch --limit 1 --json conclusion,status --jq '.[0] | \"\(.conclusion // .status)\"' 2>/dev/null)
+            set -l icon ''
+            switch \$result
+                case success; set icon '✓:green'
+                case failure; set icon '✗:red'
+                case cancelled; set icon '⊘:yellow'
+                case in_progress queued; set icon '⋯:yellow'
+            end
+            echo '$branch:'\$icon > ~/.cache/fish_ci_status
+        " &
+        disown
+    end
+end
+
+# bun
+set --export BUN_INSTALL "$HOME/.bun"
+set --export PATH $BUN_INSTALL/bin $PATH

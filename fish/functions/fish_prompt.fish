@@ -20,9 +20,20 @@ function fish_prompt
             echo -n ''
         end
 
-        set branch (git symbolic-ref --short HEAD 2>/dev/null)
+        # CI status
         set_color -b $base_bg $git_color
-        echo -n "  $branch "
+
+        echo -n "  "
+
+        set -l ci (__get_ci_status)
+        if test -n "$ci"
+            echo -n "$ci "
+        end
+
+        set_color -b $base_bg $git_color
+
+        set branch (git symbolic-ref --short HEAD 2>/dev/null)
+        echo -n "$branch "
         set_color -b $mid_bg $base_bg
         echo -n ''
     else
