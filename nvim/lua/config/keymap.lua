@@ -1,10 +1,18 @@
 vim.g.mapleader = " "
 
 -- Telescope
-vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "Find files" })
-vim.keymap.set("n", "<leader>fg", require("telescope.builtin").live_grep, { desc = "Grep" })
-vim.keymap.set("n", "<leader>fb", require("telescope.builtin").buffers, { desc = "Buffers" })
-vim.keymap.set("n", "<leader>fh", require("telescope.builtin").help_tags, { desc = "Help" })
+local ok, telescope = pcall(require, "telescope.builtin")
+
+if not ok then
+	telescope = nil
+end
+
+if telescope then
+	vim.keymap.set("n", "<leader>ff", require("telescope.builtin").find_files, { desc = "Find files" })
+	vim.keymap.set("n", "<leader>fg", require("telescope.builtin").live_grep, { desc = "Grep" })
+	vim.keymap.set("n", "<leader>fb", require("telescope.builtin").buffers, { desc = "Buffers" })
+	vim.keymap.set("n", "<leader>fh", require("telescope.builtin").help_tags, { desc = "Help" })
+end
 
 -- LSP
 vim.keymap.set("n", "gh", vim.lsp.buf.hover, { desc = "Show hover" })
@@ -41,7 +49,10 @@ vim.keymap.set("n", "<leader>k", function()
 end, { desc = "Close floating windows" })
 
 -- Undo tree
-vim.keymap.set("n", "<leader>u", require("undotree").toggle, { noremap = true, silent = true })
+local undotree_ok, undotree = pcall(require, "undotree")
+if undotree_ok then
+	vim.keymap.set("n", "<leader>u", undotree.toggle, { noremap = true, silent = true })
+end
 
 -- Transparency
 -- if vim.g.neovide then

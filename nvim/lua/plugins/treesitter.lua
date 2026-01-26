@@ -3,12 +3,17 @@ return function(use)
 		"nvim-treesitter/nvim-treesitter",
 		run = ":TSUpdate",
 		config = function()
-			require("nvim-treesitter.configs").setup({
-				highlight = {
-					enable = true,
-					additional_vim_regex_highlighting = false,
-				},
-			})
+			local ok, treesitter = pcall(require, "nvim-treesitter")
+			if ok and treesitter.setup then
+				treesitter.setup({})
+				require("nvim-treesitter.config").setup({
+					highlight = {
+						enable = true,
+						additional_vim_regex_higlighting = false,
+					},
+					indent = { enable = true },
+				})
+			end
 		end,
 	})
 end
